@@ -15,3 +15,47 @@ form.addEventListener('submit',e=>{
      .catch(err=>console.log(err));
     e.preventDefault();
 })
+
+let dataPoints = [
+    {label: 'Front End', y:0},
+    {label: 'Back End', y:0},
+    {label: 'DevOps', y:0},
+    {label: 'Tester', y:0},
+    {label: 'Qa Engineer', y:0},
+]
+
+const graph = document.querySelector('#graph')
+
+if(graph){
+    const chart = new CanvasJS.Chart('graph', {
+        animationEnabled: true,
+        theme: 'theme1',
+        title: {
+            text: 'Tech Results'
+        },
+        data: [
+            {
+                type: 'column',
+                dataPoints: dataPoints
+            }
+        ]
+    });
+    chart.render();
+
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('7396bd12fbbbbcb6fdc1', {
+      cluster: 'ap2'
+    });
+
+    var channel = pusher.subscribe('tech-poll');
+    channel.bind('tech-vote', function(data) {
+      dataPoints = dataPoints.map(x=>{
+          if(x.label == data.tech){
+              x.y +=data.points;
+          }
+          return x;
+      })
+    });
+
+}
