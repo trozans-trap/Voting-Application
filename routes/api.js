@@ -11,9 +11,11 @@ router.get('/',(req,res)=>{
 });
 
 router.post('/', (req,res)=>{
-    pusher.trigger('os-poll', "os-vote", {
+    console.log("hello");
+    console.log(req.body);
+    pusher.trigger('tech-poll', "tech-vote", {
           points: 1,
-          os: req.body.os
+          tech: req.body.tech
       });
 
     return res.json({sucess: true, message: 'You Voted SuccesFully'});
