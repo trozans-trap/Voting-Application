@@ -5,31 +5,30 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Poll</title>
+    <title>Poll Now</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-
 </head>
 
 <body>
     <div class="container">
         <h1>Hi , Please Vote ! </h1>
-        <p>Vote your Vote</p>
+        <p>Your Vote is for ?</p>
         <form id="voteForm">
             <p>
                 <label>
-                    <input type="radio" name="tech" id="backEnd" value="Back End">
+                    <input type="radio" name="tech" id="backEnd" value="BackEnd">
                     <span for="backEnd">Back End</span>
                 </label>
             </p>
             <p>
                 <label>
-                    <input type="radio" name="tech" id="frontEnd" value="Front End">
+                    <input type="radio" name="tech" id="frontEnd" value="FrontEnd">
                     <span for="frontEnd">Front End</span>
                 </label>
             </p>
             <p>
                 <label>
-                    <input type="radio" name="tech" id="qaEngineer" value="Qa Engineer">
+                    <input type="radio" name="tech" id="qaEngineer" value="QaEngineer">
                     <span for="qaEngineer">Qa Engineer</span>
                 </label>
             </p>
@@ -49,9 +48,10 @@
         </form>
         <br>
         <br>
+        
+        <h5 style="text-align: center" id="votesTotal"></h5>
         <div id="graph" style="height: 300px;width:100%"></div>
 
-        </div>
     </div>
 
 

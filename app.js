@@ -12,11 +12,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 const db = require('./config/keys').MongoURI;
+
 mongoose.connect(db, { useUnifiedTopology: true, useNewUrlParser: true })
     .then(() => console.log('MongoDb Connected...'))
     .catch(err => console.log(err));
+
 app.use(cors());
-app.use('/vote', api)
+app.use('/vote', api);
+
 app.listen(process.env.PORT||8123,()=>{
     console.log(`Server Started `)
 })
