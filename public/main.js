@@ -12,8 +12,7 @@ form.addEventListener('submit',e=>{
         })
     })
      .then(res => res.json())
-     .then(data => console.log(data))
-     .catch(err => console.log(err));
+     .catch(err => console.log("Error In Get Request :-",err));
 
     e.preventDefault();
 })
@@ -22,8 +21,6 @@ fetch('http://localhost:8123/vote')
   .then(res =>res.json())
   .then(data => {
       const votes = data.votes;
-      
-
       
         let votesCounts = {
             FrontEnd: 0,
@@ -39,8 +36,12 @@ fetch('http://localhost:8123/vote')
            ),
            {}
         );
-        console.log("cntVote",votesCounts);
-        let totalVotes = parseInt(votesCounts.FrontEnd)+parseInt(votesCounts.BackEnd)+parseInt(votesCounts.DevOps)+parseInt(votesCounts.Tester)+parseInt(votesCounts.QaEngineer);
+        let totalVotes = 0;
+        if(votesCounts.FrontEnd)totalVotes+=parseInt(votesCounts.FrontEnd);
+        if(votesCounts.BackEnd)totalVotes+=parseInt(votesCounts.BackEnd);
+        if(votesCounts.DevOps)totalVotes+=parseInt(votesCounts.DevOps);
+        if(votesCounts.Tester)totalVotes+=parseInt(votesCounts.Tester);
+        if(votesCounts.QaEngineer)totalVotes+=parseInt(votesCounts.QaEngineer);
         document.querySelector('#votesTotal').textContent = `Total Votes: ${totalVotes}`;
       
         // console.log("cnt",parseInt(votesCounts);
@@ -53,7 +54,6 @@ fetch('http://localhost:8123/vote')
     ]
     
     const graph = document.querySelector('#graph')
-    
     if(graph){
         const chart = new CanvasJS.Chart('graph', {
             animationEnabled: true,
@@ -80,9 +80,11 @@ fetch('http://localhost:8123/vote')
           dataPoints.forEach(x=>{
               if(x.label == data.tech){
                   x.y =x.y+1;
-                  totalVotes+=parseInt(data.points);
+                  totalVotes+=1;
+                  document.querySelector('#votesTotal').textContent = `Total Votes: ${totalVotes}`;
               }
           });
+          
           chart.render();
         });
       }
