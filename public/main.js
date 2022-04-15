@@ -16,46 +16,67 @@ form.addEventListener('submit',e=>{
     e.preventDefault();
 })
 
-let dataPoints = [
-    {label: 'Front End', y:0},
-    {label: 'Back End', y:0},
-    {label: 'DevOps', y:0},
-    {label: 'Tester', y:0},
-    {label: 'Qa Engineer', y:0},
-]
+fetch('http://localhost:8123/vote')
+  .then(res =>res.json())
+  .then(data => {
+      const votes = data.votes;
+      const totalVotes = votes.length;
+        let votesCounts = {
+            frontEnd: 0,
+            backEnd: 0,
+            devOps: 0,
+            tester: 0,
+            qaEngineer: 0
+        };
 
-const graph = document.querySelector('#graph')
+      votesCounts = votes.reduce(
+          (acc,vote) =>(
+            (acc[vote.tech] = (acc[vote.tech] || 0) + parseInt(vote.points)),acc
+           ),
+           {}
+        );
+        console.log("cnt",votesCounts);
+      let dataPoints = [
+        {label: 'Front End', y:votesCounts.frontEnd},
+        {label: 'Back End', y:votesCounts.backEnd},
+        {label: 'DevOps', y:votesCounts.devOps},
+        {label: 'Tester', y:votesCounts.tester},
+        {label: 'Qa Engineer', y:qaEngineer},
+    ]
+    
+    const graph = document.querySelector('#graph')
+    
+    if(graph){
+        const chart = new CanvasJS.Chart('graph', {
+            animationEnabled: true,
+            theme: 'theme1',
+            title: {
+                text: `Total Votes ${totalVotes}`
+            },
+            data: [
+                {
+                    type: 'column',
+                    dataPoints: dataPoints
+                }
+            ]
+        });
+        chart.render();
+    
+        Pusher.logToConsole = true;
+    
+        var pusher = new Pusher('7396bd12fbbbbcb6fdc1', {
+          cluster: 'ap2'
+        });
+    
+        var channel = pusher.subscribe('tech-poll');
+        channel.bind('tech-vote', function(data) {
+          dataPoints = dataPoints.map(x=>{
+              if(x.label == data.tech){
+                  x.y +=data.points;
+              }
+              return x;
+          })
+        });
+    }
+    })
 
-if(graph){
-    const chart = new CanvasJS.Chart('graph', {
-        animationEnabled: true,
-        theme: 'theme1',
-        title: {
-            text: 'Tech Results'
-        },
-        data: [
-            {
-                type: 'column',
-                dataPoints: dataPoints
-            }
-        ]
-    });
-    chart.render();
-
-    Pusher.logToConsole = true;
-
-    var pusher = new Pusher('7396bd12fbbbbcb6fdc1', {
-      cluster: 'ap2'
-    });
-
-    var channel = pusher.subscribe('tech-poll');
-    channel.bind('tech-vote', function(data) {
-      dataPoints = dataPoints.map(x=>{
-          if(x.label == data.tech){
-              x.y +=data.points;
-          }
-          return x;
-      })
-    });
-
-}
