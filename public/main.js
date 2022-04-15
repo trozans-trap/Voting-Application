@@ -12,6 +12,7 @@ form.addEventListener('submit',e=>{
         })
     })
      .then(res => res.json())
+     .then(alert("You voted Succesfully"))
      .catch(err => console.log("Error In Get Request :-",err));
 
     e.preventDefault();
@@ -54,11 +55,18 @@ fetch('http://localhost:8123/vote')
     ]
     
     const graph = document.querySelector('#graph')
+
     if(graph){
         const chart = new CanvasJS.Chart('graph', {
             animationEnabled: true,
-            theme: 'theme2',
+            theme: "light2",
             title: {},
+            axisX: {
+                title: "Tech Domain"
+            },
+            axisY: {
+                title: "No. of Votes"
+            },
             data: [
                 {
                     type: 'column',
